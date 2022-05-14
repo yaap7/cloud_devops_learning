@@ -10,13 +10,13 @@ app = Flask(__name__)
 defaultText = 'Hello Cloudy World!'
 
 
-def _encrypt(plainText):
+def __encrypt(plainText):
     # args: a single utf-8 encoded string
     # return: an utf-8 encoded string
     return b64encode(plainText.encode('utf-8')).decode('utf-8')
 
 
-def _decrypt(encryptedText):
+def __decrypt(encryptedText):
     # args: a single utf-8 encoded string
     # return: an utf-8 encoded string
     return b64decode(encryptedText.encode('utf-8')).decode('utf-8')
@@ -35,7 +35,7 @@ def hello_cloud():
 def encrypt():
     plainText = request.args.get('text')
     if plainText:
-        encryptedText = _encrypt(plainText)
+        encryptedText = __encrypt(plainText)
         output = '<p>Here is your encrypted text:</p>\n'
         output += '<pre>\n'
         output += f'{encryptedText}\n'
