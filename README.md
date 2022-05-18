@@ -28,3 +28,13 @@ The server works and reply to HTTP requests on port 5000.
 It is available with a public IP shown after apply and with `terraform output`.
 
 ## application creation
+
+I created a first draft in [cython](./cython) directory.
+
+## Ressources
+
+* <https://cloud.google.com/docs/terraform/get-started-with-terraform>
+* <https://cloud.google.com/architecture/managing-infrastructure-as-code>
+* <https://cloud.google.com/build/docs/automating-builds/build-repos-from-github>
+* <https://cloud.google.com/docs/terraform/resource-management/store-state>
+* <https://registry.terraform.io/providers/hashicorp/google/latest/docs>
