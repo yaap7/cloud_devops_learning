@@ -17,7 +17,7 @@ resource "google_compute_instance" "default" {
   }
 
   # Install Flask
-  metadata_startup_script = "sudo apt update; sudo apt install -yq build-essential python3 python3-pip rsync wget; pip install flask; wget -qO $HOME/app.py 'https://raw.githubusercontent.com/yaap7/cloud_devops_learning/main/cython/app.py'; nohup python3 $HOME/app.py &"
+  metadata_startup_script = "sudo apt update; sudo apt install -yq build-essential python3 python3-pip rsync wget; python3 -m pip install flask; wget -qO $HOME/app.py 'https://raw.githubusercontent.com/yaap7/cloud_devops_learning/main/cython/app.py'; nohup python3 $HOME/app.py &"
 
   network_interface {
     network = "default"
