@@ -1,5 +1,6 @@
 from base64 import b64encode
 from base64 import b64decode
+from binascii import Error
 from flask import escape
 from flask import Flask
 from flask import request
@@ -18,8 +19,13 @@ def __encrypt(plainText):
 
 def __decrypt(encryptedText):
     # args: a single utf-8 encoded string
-    # return: an utf-8 encoded string
-    return b64decode(encryptedText.encode('utf-8')).decode('utf-8')
+    # return: a tuple with return status and the result as utf-8 encoded string
+    try:
+        return ('success', b64decode(encryptedText.encode('utf-8')).decode('utf-8'))
+    except UnicodeDecodeError:
+        return ('failed', 'Error while decoding the input string')
+    except Error:
+        return ('failed', 'Error while decoding the input string')
 
 
 @app.route('/')
@@ -43,6 +49,24 @@ def encrypt():
     else:
         output = '<p>You do not provided the text to encrypt.<br>\n'
         output += f'Please give me your plain text using <code>{escape("?text=<your_text_here>")}</code></p>'
+    return output
+
+
+@app.route('/decrypt')
+def decrypt():
+    encryptedText = request.args.get('text')
+    if encryptedText:
+        decryptStatus, decryptedText = __decrypt(encryptedText)
+        if decryptStatus == 'success':
+            output = '<p>Here is your decrypted text:</p>\n'
+            output += '<pre>\n'
+            output += f'{escape(decryptedText)}\n'
+            output += '</pre>\n'
+        else:
+            output = f'<p><span style="color: red;">Error: {escape(decryptedText)}</span></p>'
+    else:
+        output = '<p>You do not provided the text to decrypt.<br>\n'
+        output += f'Please give me your encrypted text using <code>{escape("?text=<your_text_here>")}</code></p>'
     return output
 
 
