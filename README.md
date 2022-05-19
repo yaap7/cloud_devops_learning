@@ -56,6 +56,18 @@ It relies on the file [cloudbuild.yaml](cloudbuild.yaml) which describe the step
 * `tf plan`: goes into `cython` directory and run `terraform plan`
 * `tf apply`: check if the current branch is `prod`, and launch `terraform apply --auto-approve`. Simply display the branch name otherwise.
 
+### Tests et constats
+
+* Quand je push directement sur une branche : non testé.
+* Quand je créé une pull request (PR) from `correct-something` to `dev`:
+  * lors de la création de la PR, ça lance le build dans Cloud Build sur la branche `correct-something`.
+  * lors de l'acceptation (merge) de la PR, ça lance le build sur la branche `dev`.
+* Quand je créé une PR from `dev` to `prod`:
+  * lors de la création de la PR, ça **ne relance pas** un nouveau build. Ça utilise le build d'avant, probablement parce qu'il a réussi à détecter qu'il s'agissait de la même branche avec le même niveau de commit.
+  * lors de l'acceptation (merge) de la PR, ça lance un build sur la branche `prod`.
+
+Les branches sont protégées. On dirait que ça nécessite que le build sur la branche d'origine (par exemple, dev) soit valide avant de pouvoir pousser sur prod. Mais ça ne vérifie pas que le build sur prod fonctionne. Ça serait logique car le build a besoin que les changements soient appliqués pour pouvoir être lancé.
+
 ## Ressources
 
 * <https://cloud.google.com/docs/terraform/get-started-with-terraform>
