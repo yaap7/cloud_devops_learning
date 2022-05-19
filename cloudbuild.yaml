@@ -40,7 +40,7 @@ steps:
   args:
   - '-c'
   - |
-      if [ "x$BRANCH_NAME/" == "xprod" ]; then
+      if [ "x$BRANCH_NAME" == "xprod" ]; then
         cd cython
         echo ""
         echo "*************** TERRAFORM PLAN ******************"
