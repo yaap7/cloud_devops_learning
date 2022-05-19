@@ -104,6 +104,13 @@ Note : au début `terraform init` n'avait pas fonctionné, donc j'avais du recon
 Maintenant qu'on a une situation stable, il convient de vérifier ce qu'il advient lorsqu'on modifie l'application et qu'on pousse son code.
 Est-ce qu'une nouvelle "Compute Engine" est déployée ? avec une nouvelle adresse IP ? Est-ce que ça remplace l'ancienne ? Est-ce que les rêgles de firewall sont supprimées puis recréées ?
 
+No, it will not do anything because terraform just provision the ressource.
+We should add an update mechanism in Cloud Build configuration.
+Or, to try another service, I will play with App Engine to deploy the app automatically.
+I will also use a git repo in Cloud Source Repositories, which will deploy on App Engine using Cloud Build.
+
+See you there!
+
 ## Ressources
 
 * <https://cloud.google.com/docs/terraform/get-started-with-terraform>
