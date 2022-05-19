@@ -8,7 +8,7 @@ from flask import request
 app = Flask(__name__)
 
 
-defaultText = 'Hello Cloudy World!'
+defaultText = 'Hello less and less Cloudy World!'
 
 
 def __encrypt(plainText):
