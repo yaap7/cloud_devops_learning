@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> correct-something
 steps:
 - id: 'branch name'
   name: 'alpine'
@@ -41,7 +44,7 @@ steps:
   args:
   - '-c'
   - |
-      if [ "x$BRANCH_NAME/" == "xprod" ]; then
+      if [ "x$BRANCH_NAME" == "xprod" ]; then
         cd cython
         echo ""
         echo "*************** TERRAFORM PLAN ******************"
