@@ -67,6 +67,32 @@ It relies on the file [cloudbuild.yaml](cloudbuild.yaml) which describe the step
   * lors de l'acceptation (merge) de la PR, ça lance un build sur la branche `prod`.
 
 Les branches sont protégées. On dirait que ça nécessite que le build sur la branche d'origine (par exemple, dev) soit valide avant de pouvoir pousser sur prod. Mais ça ne vérifie pas que le build sur prod fonctionne. Ça serait logique car le build a besoin que les changements soient appliqués pour pouvoir être lancé.
+On ne peut pas non plus `git push --force` sur une branche protégée.
+On dirait que la bonne pratique est de pousser sur une autre branche, puis de créer des PR pour faire avancer les branches protégées (dans notre exemple : dev et prod).
+Mais comme je n'ai pas stocké le tfstate dans Cloud Storage, je ne peux probablement pas supprimer les ressources !
+
+### Ajout du tfstate dans Cloud Storage
+
+On créé un nouveau bucket :
+
+``` bash
+PROJECT_ID=$(gcloud config get-value project)
+gsutil mb gs://${PROJECT_ID}-tfstate
+```
+
+Optionnel : on active la gestion des versions des objets dans ce bucket :
+
+``` bash
+gsutil versioning set on gs://${PROJECT_ID}-tfstate
+```
+
+Pour ne pas que les versions reste à l'infini (et payer inutilement), on active une politique de suppression des anciennes versions (voir [cython/gs-lifecycle-config-file.json](cython/gs-lifecycle-config-file.json)) :
+
+``` bash
+gsutil lifecycle set cython/gs-lifecycle-config-file.json gs://${PROJECT_ID}-tfstate
+```
+
+On informe terraform qu'il doit stocker son tfstate dans ce bucket grâce au fichier [cython/backend.tf](cython/backend.tf).
 
 ## Ressources
 
