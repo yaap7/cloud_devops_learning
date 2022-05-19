@@ -58,9 +58,9 @@ It relies on the file [cloudbuild.yaml](cloudbuild.yaml) which describe the step
 
 ### Tests et constats
 
-* Quand je push directement sur une branche : non testé.
+* Quand je push directement sur une branche : ça lance le build.
 * Quand je créé une pull request (PR) from `correct-something` to `dev`:
-  * lors de la création de la PR, ça lance le build dans Cloud Build sur la branche `correct-something`.
+  * lors de la création de la PR, ça ne relance pas un nouveau build puisque qu'il a déjà été fait sur cette branche avec ce commit lors du push précédent.
   * lors de l'acceptation (merge) de la PR, ça lance le build sur la branche `dev`.
 * Quand je créé une PR from `dev` to `prod`:
   * lors de la création de la PR, ça **ne relance pas** un nouveau build. Ça utilise le build d'avant, probablement parce qu'il a réussi à détecter qu'il s'agissait de la même branche avec le même niveau de commit.
@@ -93,6 +93,16 @@ gsutil lifecycle set cython/gs-lifecycle-config-file.json gs://${PROJECT_ID}-tfs
 ```
 
 On informe terraform qu'il doit stocker son tfstate dans ce bucket grâce au fichier [cython/backend.tf](cython/backend.tf).
+
+Ensuite, j'ai pu pousser sur la branche `prod`, ce qui a déployé l'application dans GCP.
+J'ai pu lancer `terraform init` pour initialiser le backend, et ainsi récupérer l'état du provisionnement et voir que `terraform plan` ne proposait aucun changement car le push sur la branche avait déjà déployé les ressources.
+
+Note : au début `terraform init` n'avait pas fonctionné, donc j'avais du reconnecter mon compte via CLI grâce à la commande : `gcloud auth application-default login`.
+
+### en cas de changement
+
+Maintenant qu'on a une situation stable, il convient de vérifier ce qu'il advient lorsqu'on modifie l'application et qu'on pousse son code.
+Est-ce qu'une nouvelle "Compute Engine" est déployée ? avec une nouvelle adresse IP ? Est-ce que ça remplace l'ancienne ? Est-ce que les rêgles de firewall sont supprimées puis recréées ?
 
 ## Ressources
 
